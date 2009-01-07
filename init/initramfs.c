@@ -390,7 +390,7 @@ static int __init write_buffer(char *buf, unsigned len)
 	return len - count;
 }
 
-
+#if defined CONFIG_RD_GZIP || defined CONFIG_RD_BZIP2 || defined CONFIG_RD_LZMA
 static int __init flush_buffer(void *bufv, unsigned len)
 {
 	char *buf = (char *) bufv;
@@ -413,6 +413,7 @@ static int __init flush_buffer(void *bufv, unsigned len)
 	}
 	return origLen;
 }
+#endif
 
 static unsigned my_inptr;   /* index of next byte to be processed in inbuf */
 
@@ -450,10 +451,12 @@ static char * __init unpack_to_rootfs(char *buf, unsigned len, int check_only)
 			continue;
 		}
 		this_header = 0;
+#ifdef CONFIG_RD_GZIP
 		if (!gunzip(buf, len, NULL, flush_buffer, NULL,
 			    &my_inptr, error) &&
 		    message == NULL)
 			goto ok;
+#endif
 
 #ifdef CONFIG_RD_BZIP2
 		message = NULL; /* Zero out message, or else cpio will
@@ -474,7 +477,9 @@ static char * __init unpack_to_rootfs(char *buf, unsigned len, int check_only)
 			goto ok;
 		}
 #endif
+#if defined CONFIG_RD_GZIP || defined CONFIG_RD_BZIP2 || defined CONFIG_RD_LZMA
 ok:
+#endif
 		if (state != Reset)
 			error("junk in compressed archive");
 		this_header = saved_offset + my_inptr;
