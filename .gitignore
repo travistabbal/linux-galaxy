@@ -25,6 +25,8 @@
 *.elf
 *.bin
 *.gz
+*.lzma
+*.patch
 
 #
 # Top-level generic files
