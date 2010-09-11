@@ -37,6 +37,8 @@ on init
 on boot
 #	write /sys/class/sec/switch/usb_sel PDA
 
+	setprop ro.secure 0
+	setprop ro.debbugable 1
 	ifup lo
 	hostname localhost
 	domainname localdomain
