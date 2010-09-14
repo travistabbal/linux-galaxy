@@ -1,0 +1,13 @@
+#!/system/bin/sh
+export PATH=$PATH:/system/xbin
+for shell in bash ash /system/xbin/sh /system/bin/sh ; do
+	if ($shell -c 'echo') >/dev/null 2>&1 ; then
+		if (which $shell) >/dev/null 2>&1 ; then
+			export SHELL=`which $shell`
+		else
+			export SHELL=$shell
+		fi
+		exec $shell -i -
+	fi
+done
+exec sh
