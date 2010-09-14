@@ -121,6 +121,9 @@ loglevel 3
 # create SEC_INTERNAL_STORAGE 2/2   
 ##    mount ext3 /dev/block/mmcblk0p1 /userdata nosuid nodev
 mkdir /dbdata
+mkdir /sdext
+mount vfat /dev/block/mmcblk0p1 /sdcard
+mount vfat /dev/block/mmcblk1p1 /sdext
 start user_early_init
 write /sync_fifo sync
     chown system system /data
@@ -504,11 +507,11 @@ on boot
 
 ## Daemon processes to be run by init.
 ##
-service user_early_init /user_early_init.sh
+service user_early_init /sbin/init.d/user_early_init.sh
     oneshot
     disabled
 
-service user_init /user_init.sh
+service user_init /sbin/init.d/user_init.sh
     oneshot
     disabled
 
