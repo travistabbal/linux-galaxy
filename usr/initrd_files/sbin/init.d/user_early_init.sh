@@ -7,7 +7,6 @@ export PATH=/sbin:/system/bin:/system/xbin
 mv /system/user.log /system/user.log.old
 exec >>/system/user.log
 exec 2>&1
-mount
 cd /sbin/init.d
 echo $(date) SYSTEM EARLY INIT START
 for file in E* ; do
@@ -45,5 +44,7 @@ if ! mount -t none -o remount none /dbdata >/dev/null 2>&1 ; then
         echo "FAILURE ($?)"
     fi
 fi
+umount /sdcard
+umount /sdext
 # Allow init to proceed
 read s </sync_fifo

@@ -15,8 +15,6 @@ if cd /system/etc/init.d >/dev/null 2>&1 ; then
         echo "EXIT '$file' ($?)"
     done
 fi
-umount /sdcard
-umount /sdext
 echo $(date) USER INIT DONE
 # Allow init to proceed
 read s </sync_fifo
