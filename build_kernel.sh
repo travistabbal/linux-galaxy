@@ -38,7 +38,8 @@ fi
 if [ "$PRODUCE_ZIP" = y ] ; then
 	echo "Generating $TARGET-$VERSION.zip for flashing as update.zip"
 	rm -fr "$TARGET-$VERSION.zip"
-	cp arch/arm/boot/zImage build/update/kernel_update
+	mkdir -p build/update/tmp
+	cp arch/arm/boot/zImage build/update/tmp/zImage
 	OUTFILE="$PWD/$TARGET-$VERSION.zip"
 	cd build/update
 	eval "$MKZIP" >/dev/null 2>&1
