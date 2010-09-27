@@ -316,9 +316,6 @@ chmod 0777 /dbdata/databases
     insmod /lib/modules/vibrator.ko
     insmod /lib/modules/melfas_touchkey.ko
 
-#all operation with rootfs should be finished here, root partition will mounted read-only . d.moskvitin
-    mount rootfs rootfs / ro remount
-
 on boot
 # basic network init
     ifup lo
@@ -502,7 +499,11 @@ on boot
 # +++++++++++++++++++++++++++++++++++++++++++
 
     start user_init
-    write /sync_fifo
+    write /sync_fifo sync
+
+#all operation with rootfs should be finished here, root partition will mounted read-only . d.moskvitin
+    mount rootfs rootfs / ro remount
+
     class_start default
 
 ## Daemon processes to be run by init.
