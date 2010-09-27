@@ -44,7 +44,6 @@ alias blkrrpart="blockdev --rereadpt /dev/block/mmcblk0"
 
 model=""
 current_partition_model=""
-debug_mode=1
 detect_supported_model() {
 	# read the actual MBR
 	dd if=/dev/block/mmcblk0 of=/tmp/original.mbr bs=512 count=1
