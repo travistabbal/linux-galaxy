@@ -1,2 +1,0 @@
-package_extract_dir("tmp", "/tmp");
-write_raw_image("/tmp/zImage", "/dev/block/bml7");

@@ -25,6 +25,73 @@ if [ "$CCACHE" ] && ccache -h &>/dev/null ; then
 	echo "Using ccache to speed up compilation."
 	CROSS_COMPILE="$CCACHE $CROSS_COMPILE"
 fi
+case ${TARGET} in
+	i897)
+		TARGET_DEVICE_NAME=SGH-I897
+	;;
+esac
+do_mount() {
+	local p1 p2
+	p2=""
+	case ${TARGET} in
+		i897)
+			case $1 in
+				/system)
+					p1=stl9
+				;;
+				/dbdata)
+					p1=stl10
+				;;
+				/cache)
+					p1=stl11
+				;;
+				/data)
+					p1=mmcblk0p2
+					p2=mmcblk0p4
+				;;
+			esac
+		;;
+	esac
+	if [ -n "$p1" ] ; then
+		echo -n "mount(\"rfs\", \"/dev/block/$p1\", \"$1\")"
+		if [ -n "$p2" ] ; then
+			echo " || mount(\"ext4\", \"/dev/block/$p2\", \"$1\");"
+		else
+			echo ';'
+		fi
+	fi
+	return 0
+}
+
+write_script() {
+	test -n "$TARGET_DEVICE_NAME" && \
+		echo "assert(getprop(\"ro.product.device\") == \"$TARGET_DEVICE_NAME\" || getprop(\"ro.build.product\") == \"$TARGET_DEVICE_NAME\");"
+	declare -f pre_hook >/dev/null 2>&1 && \
+		pre_hook
+	echo 'ui_print("Unpacking files...");'
+	declare -f unpack_hook >/dev/null 2>&1 && \
+		unpack_hook
+	echo 'package_extract_dir("tmp", "/tmp");'
+	declare -f apply_hook >/dev/null 2>&1 && \
+		apply_hook
+	echo 'ui_print("Flashing kernel...");'
+	echo 'write_raw_image("/tmp/zImage", "/dev/block/bml7")'
+	declare -f post_hook >/dev/null 2>&1 && \
+		post_hook
+	return 0
+}
+
+prepare_update() {
+	rm -fr build/update
+	mkdir -p build/update/tmp
+	cp -a template/update build
+	cp -a arch/arm/boot/zImage build/update/tmp
+	write_script >build/update/META-INF/com/google/android/updater-script
+	declare -f prepare_hook >/dev/null 2>&1 && \
+		prepare_hook
+	return 0
+}
+
 echo "Beginning compilation, output redirected to build.log."
 T1=$(date +%s)
 make $MAKEOPTS ARCH=arm CROSS_COMPILE="$CROSS_COMPILE" zImage >build.log 2>&1
@@ -38,8 +105,7 @@ fi
 if [ "$PRODUCE_ZIP" = y ] ; then
 	echo "Generating $TARGET-$VERSION.zip for flashing as update.zip"
 	rm -fr "$TARGET-$VERSION.zip"
-	mkdir -p build/update/tmp
-	cp arch/arm/boot/zImage build/update/tmp/zImage
+	prepare_update
 	OUTFILE="$PWD/$TARGET-$VERSION.zip"
 	cd build/update
 	eval "$MKZIP" >/dev/null 2>&1
