@@ -27,9 +27,11 @@ if [ "$CCACHE" ] && ccache -h &>/dev/null ; then
 fi
 case ${TARGET} in
 	i897)
-		TARGET_DEVICE_NAME=SGH-I897
+		new_TARGET_DEVICE_NAME=SGH-I897
 	;;
 esac
+TARGET_DEVICE_NAME=${TARGET_DEVICE_NAME-${new_TARGET_DEVICE_NAME}}
+unset new_TARGET_DEVICE_NAME
 do_mount() {
 	local p1 p2
 	p2=""
