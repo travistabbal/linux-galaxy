@@ -187,6 +187,11 @@ letsgo() {
 	exec /sbin/init
 }
 
+if test "$$" != 1 ; then
+	alias letsgo=exit
+	debug_mode=1
+fi
+
 # proc and sys are  used 
 mount -t proc proc /proc
 mount -t sysfs sys /sys
@@ -274,7 +279,7 @@ umount /cache
 mount_sdcard
 
 # debug mode detection
-if test -n "`find /sdcard/Voodoo/ -iname 'enable*debug*'`" ; then
+if test -n "$debug_mode" -o -n "`find /sdcard/Voodoo/ -iname 'enable*debug*'`" ; then
 	ln -sf init-debug.rc init.rc
 	debug_mode=1
 else
