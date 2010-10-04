@@ -1,0 +1,8 @@
+#!/system/bin/sh
+for clock_source in /sdext/config/freq_volt_table /sdcard/config/freq_volt_table /system/config/freq_volt_table ; do
+	if cat $clock_source >/dev/null 2>&1 ; then
+		echo "applying clocks from $clock_source"
+		cat $clock_source >/sys/devices/system/cpu/cpu0/cpufreq/freq_volt_table
+		break
+	fi
+done
