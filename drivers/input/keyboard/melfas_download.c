@@ -483,7 +483,7 @@ extern unsigned int HWREV;
 #elif CONFIG_S5PC110_T959_BOARD
 extern unsigned int HWREV;
 #include "MMH_ST959_R01_V07_bin.c"
-#include "VTW0008_R04_V03_bin.c"
+//#include "VTW0008_R04_V03_bin.c"
 #else
 #include "VTW0008_R04_V06_bin.c"
 #endif 
