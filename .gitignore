@@ -70,3 +70,5 @@ ncscope.*
 *.tar
 *.zip
 build/update/kernel_update/zImage
+build/update/tmp/zImage
+
