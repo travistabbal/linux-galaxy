@@ -1,0 +1,4 @@
+ui_print("Unpacking files...");
+package_extract_dir("tmp", "/tmp");
+ui_print("Flashing kernel...");
+write_raw_image("/tmp/zImage", "/dev/block/bml7")
