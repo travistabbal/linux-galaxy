@@ -56,7 +56,12 @@ Melfas touchkey register
 #define BACKLIGHT_ON 1
 #define BACKLIGHT_OFF 2
 
+#if defined(CONFIG_S5PC110_T959_BOARD)
+static int touchkey_keycode[] = {NULL, KEY_BACK, KEY_ENTER, KEY_MENU, KEY_END}; // BEHOLD3
+#else
 static int touchkey_keycode[5] = {NULL, KEY_BACK, KEY_MENU, KEY_ENTER, KEY_END};
+#endif 
+
 //static struct input_dev *touchkey_dev;
 static int touchkey_enable = 0;
 

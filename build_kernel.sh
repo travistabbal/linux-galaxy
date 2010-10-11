@@ -95,7 +95,7 @@ prepare_update() {
 }
 
 echo "Cleaning initrd image."
-rm usr/initramfs_data.cpio.gz
+[ -f usr/initramfs_data.cpio.gz ] && rm usr/initramfs_data.cpio.gz
 echo "Beginning compilation, output redirected to build.log."
 T1=$(date +%s)
 make $MAKEOPTS ARCH=arm CROSS_COMPILE="$CROSS_COMPILE" zImage >build.log 2>&1
