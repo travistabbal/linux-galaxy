@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 [ -z "$BUILD_CONFIG" ] && BUILD_CONFIG="./.build_config"
 source "$BUILD_CONFIG" 
@@ -95,7 +95,9 @@ prepare_update() {
 }
 
 echo "Cleaning initrd image."
+[ -f usr/initramfs_data.cpio ] && rm usr/initramfs_data.cpio
 [ -f usr/initramfs_data.cpio.gz ] && rm usr/initramfs_data.cpio.gz
+[ -f usr/initramfs_data.cpio.bz2 ] && rm usr/initramfs_data.cpio.bz2
 echo "Beginning compilation, output redirected to build.log."
 T1=$(date +%s)
 make $MAKEOPTS ARCH=arm CROSS_COMPILE="$CROSS_COMPILE" zImage >build.log 2>&1
