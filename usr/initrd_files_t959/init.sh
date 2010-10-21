@@ -65,15 +65,22 @@ export PATH=/sbin:/bin
 mount -t rfs /dev/block/stl9 /system
 
 echo $(date) USER PRE INIT START
+if cd /sbin/init.d >/dev/null 2>&1 ; then
+    for file in P* ; do
+        if ! ls "$file" >/dev/null 2>&1 ; then continue ; fi
+        echo "START '$file'"
+        ./"$file"
+        echo "EXIT '$file' ($?)"
+    done
+fi
 if cd /system/etc/init.d >/dev/null 2>&1 ; then
     for file in P* ; do
         if ! ls "$file" >/dev/null 2>&1 ; then continue ; fi
         echo "START '$file'"
-        /system/bin/sh "$file"
+        ./"$file"
         echo "EXIT '$file' ($?)"
     done
 fi
-
 echo $(date) USER INIT DONE
 
 cd /

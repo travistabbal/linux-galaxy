@@ -12,16 +12,16 @@ echo $(date) SYSTEM EARLY INIT START
 for file in E* ; do
     if ! cat "$file" >/dev/null 2>&1 ; then continue ; fi
         echo "START '$file'"
-        /system/bin/sh "$file"
+        ./"$file"
         echo "EXIT '$file' ($?)"
 done
 echo $(date) SYSTEM EARLY INIT DONE
 echo $(date) USER EARLY INIT START
 if cd /system/etc/init.d >/dev/null 2>&1 ; then
     for file in E* ; do
-        if ! cat "$file" >/dev/null 2>&1 ; then continue ; fi
+    if ! cat "$file" >/dev/null 2>&1 ; then continue ; fi
         echo "START '$file'"
-        /system/bin/sh "$file"
+        ./"$file"
         echo "EXIT '$file' ($?)"
     done
 fi

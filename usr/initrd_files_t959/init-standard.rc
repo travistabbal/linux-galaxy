@@ -119,8 +119,14 @@ loglevel 3
 ###################################################################    
 # create SEC_INTERNAL_STORAGE 2/2   
 ##    mount ext3 /dev/block/mmcblk0p1 /userdata nosuid nodev
+
+		mount rfs /dev/block/mmcblk0p2 /data nosuid nodev check=no
+    chown system system /data
+    chmod 0771 /data
     
     mkdir /dbdata
+    mount rfs /dev/block/stl10 /dbdata nosuid nodev check=no
+    
     mkdir /data_tmo
     mount vfat /dev/block/mmcblk0p1 /sdcard
     mkdir /sdcard/sd
