@@ -1,9 +1,6 @@
 on init
 
-# GyuTae FIX : we should not use system partition!!!!!
-#	export PATH /sbin:/bin
-
-	export PATH /sbin:/system/bin
+	export PATH /sbin:/bin
 
 	export ANDROID_ROOT /system
 	export ANDROID_DATA /data
@@ -32,8 +29,10 @@ on init
 	mkdir /cache 0770 system cache
  
 	mount rfs /dev/block/stl3 /efs nosuid nodev check=no
-  	mount rfs /dev/block/stl9 /system check=no
-
+ 	mount rfs /dev/block/stl9 /system check=no
+ 	mount rfs /dev/block/stl11 /cache check=no
+ 	mount rfs /dev/block/stl10 /data check=no
+ 	
 on boot
 #	write /sys/class/sec/switch/usb_sel PDA
 
@@ -43,8 +42,7 @@ on boot
 
 	class_start default
 
-#service console /bin/sh
-service console /system/bin/sh
+service console /sbin/sh
 	console
 
 
