@@ -37,7 +37,7 @@
 
 #define ENABLE_DVFS_LOCK_HIGH 1
 #define USE_DVS
-//#define GPIO_BASED_DVS
+#define GPIO_BASED_DVS
 
 #define DBG(fmt...)
 //#define DBG(fmt...) printk(fmt)
@@ -50,8 +50,8 @@ unsigned int MAXFREQ_LEVEL_SUPPORTED = 4;
 unsigned int S5PC11X_MAXFREQLEVEL = 4;
 unsigned int S5PC11X_FREQ_TAB;
 //static spinlock_t g_cpufreq_lock = SPIN_LOCK_UNLOCKED;
-unsigned int s5pc11x_cpufreq_level = 4;
-unsigned int s5pc11x_cpufreq_index = 1;
+static unsigned int s5pc11x_cpufreq_level = 3;
+unsigned int s5pc11x_cpufreq_index = 0;
 
 static char cpufreq_governor_name[CPUFREQ_NAME_LEN] = "conservative";// default governor
 static char userspace_governor[CPUFREQ_NAME_LEN] = "userspace";
@@ -79,37 +79,23 @@ extern int store_up_down_threshold(unsigned int down_threshold_value,
 extern unsigned int gbTransitionLogEnable;
 
 /* frequency */
-/* up to 16 entries allowed, [16] is then the end-of-table marker
- */
-struct cpufreq_frequency_table s5pc110_freq_table_1GHZ[17] = {
-	{0, 1000*1000},
-	{1, 800*1000},
-	{2, 400*1000},
-	{3, 200*1000},
-	{4, 100*1000},
+static struct cpufreq_frequency_table s5pc110_freq_table_1GHZ[] = {
+	{L0, 1000*1000},
+	{L1, 800*1000},
+	{L2, 400*1000},
+	{L3, 200*1000},
+	{L4, 100*1000},
 	{0, CPUFREQ_TABLE_END},
 };
 
 /*Assigning different index for fast scaling up*/
 static unsigned char transition_state_1GHZ[][2] = {
-        { 1, 0},
-        { 2, 0},
-        { 3, 0},
-	{ 4, 0},
-	{ 5, 0},
-        { 6, 0},
-        { 7, 0},
-        { 8, 0},
-	{ 9, 0},
-	{10, 0},
-        {11, 0},
-        {12, 0},
-        {13, 0},
-	{14, 0},
-	{15, 0},
-	{15, 0},
+        {1, 0},
+        {2, 0},
+        {3, 1},
+        {4, 2},
+        {5, 3},
 };
-
 
 /* frequency */
 static struct cpufreq_frequency_table s5pc110_freq_table_800MHZ[] = {
@@ -141,22 +127,11 @@ static struct cpufreq_frequency_table *s5pc110_freq_table[] = {
 
 static unsigned int s5pc110_thres_table_1GHZ[][2] = {
 //	down threshold, up threshold
-        {60, 90},
-        {40, 90},
-        {40, 90},
-        {40, 90},
-        {40, 90},
-        {40, 90},
-        {40, 90},
-        {40, 90},
-        {40, 90},
-        {40, 90},
-        {40, 90},
-        {40, 90},
-        {40, 90},
-        {40, 90},
-        {40, 90},
-        {40, 90},
+        {40, 70},
+        {30, 90},
+        {30, 70},
+        {30, 70},
+        {30, 70},
 };
 
 static unsigned int s5pc110_thres_table_800MHZ[][2] = {
@@ -372,7 +347,7 @@ int s5pc110_pm_target(unsigned int target_freq)
 		
 		// ARM MCS value set
 		if (S5PC11X_FREQ_TAB  == 0) { // for 1G table
-			if (index >= S5PC11X_MAXFREQLEVEL && prevIndex < S5PC11X_MAXFREQLEVEL) {
+			if ((prevIndex < 3) && (index >= 3)) {
 				ret = __raw_readl(S5P_ARM_MCS);
 				DBG("MDSvalue = %08x\n", ret);
 				ret = (ret & ~(0x3)) | 0x3;
@@ -408,7 +383,7 @@ int s5pc110_pm_target(unsigned int target_freq)
 #endif
 		// ARM MCS value set
 		if (S5PC11X_FREQ_TAB  == 0) { // for 1G table
-			if (index < S5PC11X_MAXFREQLEVEL && prevIndex >= S5PC11X_MAXFREQLEVEL) {
+			if ((prevIndex >= 3) && (index < 3)) {
 				ret = __raw_readl(S5P_ARM_MCS);
 				DBG("MDSvalue = %08x\n", ret);				
 				ret = (ret & ~(0x3)) | 0x1;
@@ -667,7 +642,7 @@ void s5pc11x_cpufreq_powersave(struct early_suspend *h)
 {
 	//unsigned long irqflags;
 	//spin_lock_irqsave(&g_cpufreq_lock, irqflags);
-	s5pc11x_cpufreq_level = S5PC11X_MAXFREQLEVEL;
+	s5pc11x_cpufreq_level = S5PC11X_MAXFREQLEVEL + 2;
 	//spin_unlock_irqrestore(&g_cpufreq_lock, irqflags);
 	return;
 }
@@ -677,8 +652,8 @@ void s5pc11x_cpufreq_performance(struct early_suspend *h)
 	//unsigned long irqflags;
 	if(!is_userspace_gov()) {
 		//spin_lock_irqsave(&g_cpufreq_lock, irqflags);
-		s5pc11x_cpufreq_level = 0;
-		s5pc11x_cpufreq_index = 0;
+		s5pc11x_cpufreq_level = S5PC11X_MAXFREQLEVEL;
+		s5pc11x_cpufreq_index = CLIP_LEVEL(s5pc11x_cpufreq_index, S5PC11X_MAXFREQLEVEL);
 		//spin_unlock_irqrestore(&g_cpufreq_lock, irqflags);
 		s5pc110_target(NULL, s5pc110_freq_table[S5PC11X_FREQ_TAB][s5pc11x_cpufreq_index].frequency, 1);
 	}
@@ -738,7 +713,7 @@ static int __init s5pc110_cpu_init(struct cpufreq_policy *policy)
 
 	if (policy->cpu != 0)
 		return -EINVAL;
-	policy->cur = policy->min = policy->max = 1000000;
+	policy->cur = policy->min = policy->max = s5pc110_getspeed(0);
 	//spin_lock_irqsave(&g_cpufreq_lock, irqflags);
 #if 0//boot 800Mhz, kernel 1Ghz
         if(policy->max == MAXIMUM_FREQ) {
@@ -763,7 +738,7 @@ static int __init s5pc110_cpu_init(struct cpufreq_policy *policy)
 		printk("%s, EVT1 1Ghz Enable\n",__func__);
 		S5PC11X_FREQ_TAB = 0;
 		S5PC11X_MAXFREQLEVEL = 4;
-		MAXFREQ_LEVEL_SUPPORTED = 4;
+		MAXFREQ_LEVEL_SUPPORTED = 5;
 		g_dvfs_high_lock_limit = 4;
 	}
 	else

@@ -55,7 +55,7 @@ extern unsigned int s5pc11x_cpufreq_index;
 
 
 /*APLL_FOUT, MPLL_FOUT, ARMCLK, HCLK_DSYS*/
-u32 s5p_sysout_clk_tab_1GHZ[17][4] = {
+static const u32 s5p_sysout_clk_tab_1GHZ[][4] = {
 	// APLL:1000,ARMCLK:1000,HCLK_MSYS:200,MPLL:667,HCLK_DSYS:166,HCLK_PSYS:133,PCLK_MSYS:100,PCLK_DSYS:83,PCLK_PSYS:66
 	{1000* MHZ, 667 *MHZ, 1000 *MHZ, 166 *MHZ},
 	// APLL:800,ARMCLK:800,HCLK_MSYS:200,MPLL:667,HCLK_DSYS:166,HCLK_PSYS:133,PCLK_MSYS:100,PCLK_DSYS:83,PCLK_PSYS:66
@@ -75,17 +75,17 @@ u32 s5p_sysout_clk_tab_1GHZ[17][4] = {
 
 /*div0 ratio table*/
 /*apll, a2m, HCLK_MSYS, PCLK_MSYS, HCLK_DSYS, PCLK_DSYS, HCLK_PSYS, PCLK_PSYS, MFC_DIV, G3D_DIV, MSYS source(2D, 3D, MFC)(0->apll,1->mpll), DMC0 div*/
-u32 s5p_sys_clk_div0_tab_1GHZ[17][DIV_TAB_MAX_FIELD] = {
-        {0, 4, 4, 1, 3, 1, 4, 1, 0, 0, 0, 3}, /* APLL=1.000GHz, MPLL=667MHz, ARMCLK=1.000GHz, SCLKA2M=200MHz, HCLK_MSYS=200MHz */
-        {0, 3, 3, 1, 3, 1, 4, 1, 0, 0, 0, 3}, /* APLL=0.800GHz, MPLL=667MHz, ARMCLK=0.800GHz, SCLKA2M=200MHz, HCLK_MSYS=200MHz */
-        {1, 3, 1, 1, 3, 1, 4, 1, 0, 0, 0, 3}, /* APLL=0.800GHz, MPLL=667MHz, ARMCLK=0.400GHz, SCLKA2M=200MHz, HCLK_MSYS=200MHz */
-        {3, 3, 0, 1, 3, 1, 4, 1, 0, 0, 0, 3}, /* APLL=0.800GHz, MPLL=667MHz, ARMCLK=0.200GHz, SCLKA2M=200MHz, HCLK_MSYS=200MHz */
-        {7, 7, 0, 0, 7, 0, 9, 0, 0, 0, 0, 4}, /* APLL=0.800GHz, MPLL=667MHz, ARMCLK=0.100GHz, SCLKA2M=100MHz, HCLK_MSYS=100MHz */
+static const u32 s5p_sys_clk_div0_tab_1GHZ[][DIV_TAB_MAX_FIELD] = {
+        {0, 4, 4, 1, 3, 1, 4, 1, 3, 3, 0, 3},
+        {0, 3, 3, 1, 3, 1, 4, 1, 3, 3, 0, 3},
+        {1, 3, 1, 1, 3, 1, 4, 1, 3, 3, 0, 3},
+        {3, 3, 0, 1, 3, 1, 4, 1, 3, 3, 0, 3},
+        {7, 7, 0, 0, 7, 0, 9, 0, 3, 3, 1, 4},
 };
 
 /*pms value table*/
 /*APLL(m, p, s), MPLL(m, p, s)*/
-u32 s5p_sys_clk_mps_tab_1GHZ[17][6] = {
+static const u32 s5p_sys_clk_mps_tab_1GHZ[][6] = {
         {250, 6, 1, 667, 12, 1},
         {200, 6, 1, 667, 12, 1},
         {200, 6, 1, 667, 12, 1},
@@ -95,7 +95,7 @@ u32 s5p_sys_clk_mps_tab_1GHZ[17][6] = {
 
 
 /*APLL_FOUT, MPLL_FOUT, ARMCLK, HCLK_DSYS*/
-u32 s5p_sysout_clk_tab_800MHZ[][4] = {
+static const u32 s5p_sysout_clk_tab_800MHZ[][4] = {
 	// APLL:800,ARMCLK:800,HCLK_MSYS:200,MPLL:667,HCLK_DSYS:166,HCLK_PSYS:133,PCLK_MSYS:100,PCLK_DSYS:83,PCLK_PSYS:66
 	{800* MHZ, 667 *MHZ, 800 *MHZ, 166 *MHZ},
 	// APLL:800,ARMCLK:400,HCLK_MSYS:200,MPLL:667,HCLK_DSYS:166,HCLK_PSYS:133,PCLK_MSYS:100,PCLK_DSYS:83,PCLK_PSYS:66
@@ -111,7 +111,7 @@ u32 s5p_sysout_clk_tab_800MHZ[][4] = {
 
 /*div0 ratio table*/
 /*apll, a2m, HCLK_MSYS, PCLK_MSYS, HCLK_DSYS, PCLK_DSYS, HCLK_PSYS, PCLK_PSYS, MFC_DIV, G3D_DIV,MSYS source, DMC0 div*/
-u32 s5p_sys_clk_div0_tab_800MHZ[][DIV_TAB_MAX_FIELD] = {
+static const u32 s5p_sys_clk_div0_tab_800MHZ[][DIV_TAB_MAX_FIELD] = {
         {0, 3, 3, 1, 3, 1, 4, 1, 3, 3, 0, 3},
         {1, 3, 1, 1, 3, 1, 4, 1, 3, 3, 0, 3},
         {3, 3, 0, 1, 3, 1, 4, 1, 3, 3, 0, 3},
@@ -121,7 +121,7 @@ u32 s5p_sys_clk_div0_tab_800MHZ[][DIV_TAB_MAX_FIELD] = {
 
 /*pms value table*/
 /*APLL(m, p, s), MPLL(m, p, s)*/
-u32 s5p_sys_clk_mps_tab_800MHZ[][6] = {
+static const u32 s5p_sys_clk_mps_tab_800MHZ[][6] = {
         {200, 6, 1, 667, 12, 1},
         {200, 6, 1, 667, 12, 1},
         {200, 6, 1, 667, 12, 1},
@@ -129,17 +129,17 @@ u32 s5p_sys_clk_mps_tab_800MHZ[][6] = {
 };
 
 
-u32 (*s5p_sysout_clk_tab_all[2])[4] = {
+static const u32 (*s5p_sysout_clk_tab_all[2])[4] = {
         s5p_sysout_clk_tab_1GHZ,
         s5p_sysout_clk_tab_800MHZ,
 };
 
-u32 (*s5p_sys_clk_div0_tab_all[2])[DIV_TAB_MAX_FIELD] = {
+static const u32 (*s5p_sys_clk_div0_tab_all[2])[DIV_TAB_MAX_FIELD] = {
         s5p_sys_clk_div0_tab_1GHZ,
         s5p_sys_clk_div0_tab_800MHZ,
 };
 
-u32 (*s5p_sys_clk_mps_tab_all[2])[6] = {
+static const u32 (*s5p_sys_clk_mps_tab_all[2])[6] = {
         s5p_sys_clk_mps_tab_1GHZ,
         s5p_sys_clk_mps_tab_800MHZ,
 };
@@ -236,73 +236,15 @@ static u32 s5p_cpu_clk_tab_size(void)
 		return ARRAY_SIZE(s5p_sys_clk_mps_tab_800MHZ);
 }
 
-static void s5pc11x_clk_set_gpu_src(u32 gpu_src)
-{
-	u32 reg, newreg, mask;
-	newreg = reg = __raw_readl(S5P_CLK_SRC2);
-	mask = (S5P_CLKSRC2_G3D_MASK | S5P_CLKSRC2_MFC_MASK | S5P_CLKSRC2_G2D_MASK);
-	newreg &= ~mask;
-	newreg |= (gpu_src<<S5P_CLKSRC2_G3D_SHIFT) | (gpu_src<<S5P_CLKSRC2_MFC_SHIFT) | (gpu_src<<S5P_CLKSRC2_G2D_SHIFT);
-	if (newreg != reg)
-	{
-		__raw_writel(newreg, S5P_CLK_SRC2);
-		do {
-			reg = __raw_readl(S5P_CLK_MUX_STAT1);
-		} while (reg & ((1<<7)|(1<<3)|(1<<27)));
-	}
-}
 
-static void s5pc11x_clk_set_gpu_div(u32 gpu_div, u32 mfc_div)
-{
-	u32 reg, newreg, mask;
-	newreg = reg = __raw_readl(S5P_CLK_DIV2);
-	mask = (S5P_CLKDIV2_G3D_MASK | S5P_CLKDIV2_MFC_MASK  | S5P_CLKDIV2_G2D_MASK);
-	newreg &= ~mask;
-	newreg |= (gpu_div <<S5P_CLKDIV2_G3D_SHIFT) |
-		(gpu_div <<S5P_CLKDIV2_MFC_SHIFT) |
-		(gpu_div <<S5P_CLKDIV2_G2D_SHIFT);
-	if (newreg != reg)
-	{
-		__raw_writel(newreg, S5P_CLK_DIV2);
-		do {
-			reg = __raw_readl(S5P_CLK_DIV_STAT0);
-		} while (reg & ((1<<16)|(1<<17)));
-		do {
-			reg = __raw_readl(S5P_CLK_DIV_STAT1);
-		} while (reg & (1<<20));
-	}
-}
-static void s5pc11x_clk_set_gpu(int index)
-{
-	u32 (*s5p_sys_clk_div0_tab)[DIV_TAB_MAX_FIELD];
-	u32 gpu_src, gpu_div, mfc_div;
-	s5p_sys_clk_div0_tab = s5p_sys_clk_div0_tab_all[S5PC11X_FREQ_TAB];
-	if (index < 0) {
-		mfc_div = gpu_div = 3;
-		gpu_src = 1;
-	} else {
-		mfc_div = s5p_sys_clk_div0_tab[index][8];
-		gpu_div = s5p_sys_clk_div0_tab[index][9];
-		gpu_src = s5p_sys_clk_div0_tab[index][10];
-	}
-	if (gpu_src)
-	{
-		s5pc11x_clk_set_gpu_div(gpu_div, mfc_div);
-		s5pc11x_clk_set_gpu_src(gpu_src);
-	} else {
-		s5pc11x_clk_set_gpu_src(gpu_src);
-		s5pc11x_clk_set_gpu_div(gpu_div, mfc_div);
-	}
-}
 
 int s5pc11x_clk_set_apll(unsigned int target_freq,
                                 unsigned int index )
 {
 	u32 val, reg;
 	unsigned int mask;	
-	u32 (*s5p_sys_clk_div0_tab)[DIV_TAB_MAX_FIELD];
-	u32 (*s5p_sys_clk_mps_tab)[6];
-	u32 gpu_src;
+	const u32 (*s5p_sys_clk_div0_tab)[DIV_TAB_MAX_FIELD];
+	const u32 (*s5p_sys_clk_mps_tab)[6];
 
 	s5p_sys_clk_div0_tab = s5p_sys_clk_div0_tab_all[S5PC11X_FREQ_TAB];
 	s5p_sys_clk_mps_tab = s5p_sys_clk_mps_tab_all[S5PC11X_FREQ_TAB];
@@ -320,13 +262,30 @@ int s5pc11x_clk_set_apll(unsigned int target_freq,
 	//__raw_writel(0x0E100222, S5P_VA_DMC1 + 0x3C);		
 	
 	/* Change APLL to MPLL in MFC_MUX and G3D MUX and G2D */
-	gpu_src = s5p_sys_clk_div0_tab[index][10];
+	reg = __raw_readl(S5P_CLK_DIV2);
+	DBG("before apll transition DIV2=%x\n",reg);
+	reg &= ~(S5P_CLKDIV2_G3D_MASK | S5P_CLKDIV2_MFC_MASK  | S5P_CLKDIV2_G2D_MASK);
+	reg |= (0x3<<S5P_CLKDIV2_G3D_SHIFT) |
+		(0x3<<S5P_CLKDIV2_MFC_SHIFT) | (0x3<<S5P_CLKDIV2_G2D_SHIFT);
+	__raw_writel(reg, S5P_CLK_DIV2);
+	DBG("during apll transition DIV2=%x\n",reg);
+	do {
+		reg = __raw_readl(S5P_CLK_DIV_STAT0);
+	} while (reg & ((1<<16)|(1<<17)));
+	do {
+		reg = __raw_readl(S5P_CLK_DIV_STAT1);
+	} while (reg & (1<<20));
 		
 	reg = __raw_readl(S5P_CLK_SRC2);
 	DBG("before apll transition SRC2=%x\n",reg);
-	/* If prior source was A2M, switch to MPLL now */
-	s5pc11x_clk_set_gpu(gpu_src == 1 ? index : -1);
-	//////////////////////////////////////////
+	reg &= ~(S5P_CLKSRC2_G3D_MASK | S5P_CLKSRC2_MFC_MASK | S5P_CLKSRC2_G2D_MASK);
+	reg |= (1<<S5P_CLKSRC2_G3D_SHIFT) | (1<<S5P_CLKSRC2_MFC_SHIFT) | (1<<S5P_CLKSRC2_G2D_SHIFT);
+	__raw_writel(reg, S5P_CLK_SRC2);
+	DBG("during apll transition SRC2=%x\n",reg);	
+	do {
+		reg = __raw_readl(S5P_CLK_MUX_STAT1);
+	} while (reg & ((1<<7)|(1<<3)|(1<<27)));
+	
 	/* SCLKAPLL -> SCLKMPLL */
 	reg = __raw_readl(S5P_CLK_SRC0);
 	DBG("before apll transition SRC0=%x\n",reg);	
@@ -337,6 +296,7 @@ int s5pc11x_clk_set_apll(unsigned int target_freq,
 	do {
 		reg = __raw_readl(S5P_CLK_MUX_STAT0);
 	} while (reg & (0x1<<18));		
+	//////////////////////////////////////////
 	
 	/* Set apll_out=fin */
 	val = __raw_readl(S5P_CLK_SRC0);
@@ -386,10 +346,26 @@ int s5pc11x_clk_set_apll(unsigned int target_freq,
 			
 	////////////////////////////////////
 	/* Change MPLL to APLL in MFC_MUX and G3D MUX */
-	/* If gpu_src == 1, these already have the clock and divider specified
-	   by the new mode. */
-	if (gpu_src == 0)
-		s5pc11x_clk_set_gpu(index);
+	reg = __raw_readl(S5P_CLK_SRC2);
+	reg &= ~(S5P_CLKSRC2_G3D_MASK | S5P_CLKSRC2_MFC_MASK | S5P_CLKSRC2_G2D_MASK);
+	reg |= (0<<S5P_CLKSRC2_G3D_SHIFT) | (0<<S5P_CLKSRC2_MFC_SHIFT) | (0<<S5P_CLKSRC2_G2D_SHIFT);
+	__raw_writel(reg, S5P_CLK_SRC2);
+	DBG("after apll transition SRC2=%x\n",reg);
+	do {
+		reg = __raw_readl(S5P_CLK_MUX_STAT1);
+	} while (reg & ((1<<7)|(1<<3)|(1<<27)));
+			
+	reg = __raw_readl(S5P_CLK_DIV2);
+	reg &= ~(S5P_CLKDIV2_G3D_MASK | S5P_CLKDIV2_MFC_MASK | S5P_CLKDIV2_G2D_MASK);
+	reg |= (0x0<<S5P_CLKDIV2_G3D_SHIFT)|(0x0<<S5P_CLKDIV2_MFC_SHIFT)|(0x0<<S5P_CLKDIV2_G2D_SHIFT);
+	__raw_writel(reg, S5P_CLK_DIV2);
+	DBG("after apll transition DIV2=%x\n",reg);
+	do {
+		reg = __raw_readl(S5P_CLK_DIV_STAT0);
+	} while (reg & ((1<<16)|(1<<17)));
+	do {
+		reg = __raw_readl(S5P_CLK_DIV_STAT1);
+	} while (reg & (1<<20));
 
 	/* Change MPLL to APLL in MSYS_MUX and HPM_MUX */
 	reg = __raw_readl(S5P_CLK_SRC0);
@@ -422,10 +398,10 @@ int s5pc11x_clk_set_rate(struct clk *clk, unsigned int target_freq,
 {
 	int cur_freq;
 	unsigned int mask;
-	u32 val;
+	u32 val, reg;
 	u32 size;
-	u32 (*s5p_sysout_clk_tab)[4];
-	u32 (*s5p_sys_clk_div0_tab)[DIV_TAB_MAX_FIELD];
+	const u32 (*s5p_sysout_clk_tab)[4];
+	const u32 (*s5p_sys_clk_div0_tab)[DIV_TAB_MAX_FIELD];
 
 	s5p_sysout_clk_tab = s5p_sysout_clk_tab_all[S5PC11X_FREQ_TAB];
 	s5p_sys_clk_div0_tab = s5p_sys_clk_div0_tab_all[S5PC11X_FREQ_TAB];
@@ -523,11 +499,6 @@ int s5pc11x_clk_set_rate(struct clk *clk, unsigned int target_freq,
 		DBG("changing apll\n");
 		s5pc11x_clk_set_apll(target_freq, index);
 		return 0;	
-	} else if (s5p_sys_clk_div0_tab[prevIndex][10] != s5p_sys_clk_div0_tab[index][8] ||
-			s5p_sys_clk_div0_tab[prevIndex][10] != s5p_sys_clk_div0_tab[index][9] ||
-			s5p_sys_clk_div0_tab[prevIndex][10] != s5p_sys_clk_div0_tab[index][10]) {
-		DBG("changing gpu\n");
-		s5pc11x_clk_set_gpu(index);
 	}
 	DBG("apll target frequency = %d, index=%d\n",s5p_sysout_clk_tab[index][2],index);
 
@@ -568,9 +539,9 @@ int s5pc11x_clk_set_mpll(unsigned int index )
 	struct clk *xtal_clk;
         u32 xtal;
 
-	u32 (*s5p_sysout_clk_tab)[4];
-	u32 (*s5p_sys_clk_div0_tab)[DIV_TAB_MAX_FIELD];
-	u32 (*s5p_sys_clk_mps_tab)[6];
+	const u32 (*s5p_sysout_clk_tab)[4];
+	const u32 (*s5p_sys_clk_div0_tab)[DIV_TAB_MAX_FIELD];
+	const u32 (*s5p_sys_clk_mps_tab)[6];
 
         s5p_sysout_clk_tab = s5p_sysout_clk_tab_all[S5PC11X_FREQ_TAB];
 	s5p_sys_clk_div0_tab = s5p_sys_clk_div0_tab_all[S5PC11X_FREQ_TAB];
@@ -690,8 +661,8 @@ int s5pc11x_clk_dsys_psys_change(int index) {
 	unsigned int div_hclk_dsys, div_hclk_psys, div_pclk_dsys, div_pclk_psys, val, mask;
 	u32 size;
 	
-	u32 (*s5p_sysout_clk_tab)[4];
-	u32 (*s5p_sys_clk_div0_tab)[DIV_TAB_MAX_FIELD];
+	const u32 (*s5p_sysout_clk_tab)[4];
+	const u32 (*s5p_sys_clk_div0_tab)[DIV_TAB_MAX_FIELD];
 
         s5p_sysout_clk_tab = s5p_sysout_clk_tab_all[S5PC11X_FREQ_TAB];
 	s5p_sys_clk_div0_tab = s5p_sys_clk_div0_tab_all[S5PC11X_FREQ_TAB];
